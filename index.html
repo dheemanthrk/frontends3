@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image to S3</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1024.0.min.js"></script>
+</head>
+<body>
+    <h1>Upload Image to S3</h1>
+    <input type="file" id="fileInput" accept="image/*">
+    <button onclick="uploadFile()">Upload Image</button>
+
+    <script>
+        // Initialize AWS SDK with your credentials
+        AWS.config.update({
+            accessKeyId: 'ASIA3FLDZKB2IS23TBPN',
+            secretAccessKey: 'K+/RGrfaeLFyeee1rYF4m/1UgwHykLytcjXw8MMB',
+            sessionToken: 'IQoJb3JpZ2luX2VjEKL//////////wEaCXVzLXdlc3QtMiJHMEUCIQDotaD9A/lr+cfh5BGLFy7owQogWQLxvrumIe1G6u5SfAIgNpyAaGe/R716f6F6+F4ZbTN4q8bhAP4ikhwp9lPDw/MqsgIIy///////////ARAAGgw3NjczOTc4MTAyOTIiDM30pYttmRDiQCmYziqGArXr559LBjmX9MOghAwOyk/BGstBiII/TJJZxQAQebWG+QUEg173g7xkkWSw3GJ2iR/Vx1oPp6KXUpv1OtDPMLF5jXqoYKXzzp+78QxI2JAQBjgzSqk8Eya0pwZBJTOPPrkwF+WkCMfnBKa1w1mlmR6nhn3tuDzaUIKQRHMHhTj08jf1LhEUc+WRPsbTk4waMmQtrDxK4Gu2j6QupUprktp5l6CoCQt0FwM2ZRxh9FGNAdn9ZBCDDoI3yhKh218NFtvCG/lsG9VZp3zEEFmdcy3r5F129YFVDIDVsaP6vQJQmMyBQvjSiB5RNnP4xDkTDPrSN9Ec1wzxtmEuRDlC4U7AG9cQk9Uww/zHsAY6nQHlLeedi3R8PfHnrynSfNVEN8KH4exgwKDzVbZVNk5S/4TRyKZ1yVETbby2LS1ESFhzdGF4H3m1Nc3QdzJH1YWKaAxJFOGV9qa4aZ5BYUw+yna9RocuzgVWKX8vvv6HrtlSaYTCuKSCsAx183nfosaEQ+bgn2pZZVluYnWWGVaiOONTY79jbBJ/g6oTFtVc3Jn2MHhWpUwUthkFIjOu',
+            region: 'us-east-1'
+        });
+
+        // Create S3 object
+        var s3 = new AWS.S3();
+
+        // Function to handle file upload
+        function uploadFile() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            var fileName = file.name;
+            
+            // Specify the S3 bucket name and key (file name)
+            var bucketName = 'textractimagebucket1';
+            var key = 'folder/' + fileName; // You can specify the folder path if needed
+
+            // Prepare params for S3 upload
+            var params = {
+                Bucket: bucketName,
+                Key: key,
+                Body: file,
+            };
+
+            // Upload the file to the bucket
+            s3.upload(params, function(err, data) {
+                if (err) {
+                    console.error("Error uploading file:", err);
+                    return;
+                }
+                console.log("File uploaded successfully. File URL:", data.Location);
+                alert("File uploaded successfully. File URL: " + data.Location);
+            });
+        }
+    </script>
+</body>
+</html>
